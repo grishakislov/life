@@ -1,5 +1,8 @@
 package ru.arlechin.life;
 
+import ru.arlechin.life.model.Pattern;
+import ru.arlechin.life.model.Point;
+
 import java.util.ArrayList;
 import java.util.BitSet;
 
@@ -13,6 +16,7 @@ public class World {
     private int width;
     private int height;
     private Screen screen;
+    private Boolean useLoop;
 
     public void init(int width, int height, Screen screen) {
         this.width = width;
@@ -22,11 +26,23 @@ public class World {
         this.nextGeneration = new BitSet(width * height);
     }
 
+    public void loadPattern(Pattern pattern) {
+        Point cell;
+        this.useLoop = pattern.getUseLoop();
+        for (int i = 0; i < pattern.getCells().size(); i++) {
+            cell = pattern.getCells().get(i);
+            setCell(cell.getX(), cell.getY(), true);
+        }
+    }
+
     public void makeTurn() {
         nextGeneration.clear();
 
-        for (int y = 0; y <= height; y++) {
-            for (int x = 0; x <= width; x++) {
+        int h = useLoop ? height : height - 1;
+        int w = useLoop ? width : width - 1;
+
+        for (int y = 0; y <= h; y++) {
+            for (int x = 0; x <= w; x++) {
                 nextGeneration.set(indexOf(x, y), createNextGenerationCell(x, y));
             }
         }
@@ -57,6 +73,7 @@ public class World {
 
     private ArrayList<Boolean> mooreNeighbourhoodFor(int x, int y) {
         ArrayList<Boolean> result = new ArrayList<Boolean>();
+
         result.add(getCellAt(x - 1, y - 1));
         result.add(getCellAt(x, y - 1));
         result.add(getCellAt(x + 1, y - 1));
@@ -65,6 +82,7 @@ public class World {
         result.add(getCellAt(x - 1, y + 1));
         result.add(getCellAt(x, y + 1));
         result.add(getCellAt(x + 1, y + 1));
+
         return result;
     }
 
@@ -73,6 +91,11 @@ public class World {
     }
 
     private Boolean getCellAt(int x, int y) {
+        if (!useLoop) {
+            if (x < 0 || x > width - 1 || y < 0 || y > height - 1) {
+                return false;
+            }
+        }
         return currentGeneration.get(indexOf(x, y));
     }
 
