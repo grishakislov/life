@@ -3,9 +3,6 @@ package ru.arlechin.life;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.image.BufferedImage;
-import java.awt.image.RescaleOp;
-import java.awt.image.WritableRaster;
-import java.util.ArrayList;
 import java.util.BitSet;
 
 /**
@@ -22,12 +19,12 @@ public class Screen {
 
         screen = new BufferedImage(width, height, BufferedImage.BITMASK);
 
-        scaledScreen = new BufferedImage(width * App.SCALE, height * App.SCALE, screen.getType());
+        scaledScreen = new BufferedImage(width * App.SCREEN_SCALE, height * App.SCREEN_SCALE, screen.getType());
 
         frame = new JFrame("Life");
         panel = new MainPanel();
         frame.add("Center", panel);
-        panel.setPreferredSize(new Dimension(width * App.SCALE, height * App.SCALE));
+        panel.setPreferredSize(new Dimension(width * App.SCREEN_SCALE, height * App.SCREEN_SCALE));
         frame.pack();
         frame.setVisible(true);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -52,7 +49,7 @@ public class Screen {
 
         public void paint(Graphics g) {
             Graphics2D g2d = scaledScreen.createGraphics();
-            g2d.scale(App.SCALE, App.SCALE);
+            g2d.scale(App.SCREEN_SCALE, App.SCREEN_SCALE);
             g2d.drawImage(screen, 0, 0, null);
             g2d.dispose();
 

@@ -12,30 +12,33 @@ public class World {
     private BitSet nextGeneration;
     private int width;
     private int height;
+    private Screen screen;
 
-    public void init(int width, int height) {
+    public void init(int width, int height, Screen screen) {
         this.width = width;
         this.height = height;
-        currentGeneration = new BitSet(width * height);
-        nextGeneration = new BitSet(width * height);
+        this.screen = screen;
+        this.currentGeneration = new BitSet(width * height);
+        this.nextGeneration = new BitSet(width * height);
     }
 
-    public void turn() {
+    public void makeTurn() {
         nextGeneration.clear();
 
         for (int y = 0; y <= height; y++) {
             for (int x = 0; x <= width; x++) {
-                nextGeneration.set(getIndex(x, y), createNextGenerationCell(x, y));
+                nextGeneration.set(indexOf(x, y), createNextGenerationCell(x, y));
             }
         }
 
         currentGeneration = (BitSet)nextGeneration.clone();
+        screen.redraw(currentGeneration);
     }
 
     private Boolean createNextGenerationCell(int currentCellX, int currentCellY) {
         int numLivingNeighbours = 0;
-        Boolean currentCellIsAlive = getCellAt(currentCellX,currentCellY);
-        ArrayList<Boolean> neighbours = getMooreNeighbourhoodFor(currentCellX, currentCellY);
+        Boolean currentCellIsAlive = getCellAt(currentCellX, currentCellY);
+        ArrayList<Boolean> neighbours = mooreNeighbourhoodFor(currentCellX, currentCellY);
 
         for (int i = 0; i < neighbours.size(); i++) {
             if (neighbours.get(i)) {
@@ -52,31 +55,28 @@ public class World {
         return currentCellIsAlive;
     }
 
-    private ArrayList<Boolean> getMooreNeighbourhoodFor(int x, int y) {
+    private ArrayList<Boolean> mooreNeighbourhoodFor(int x, int y) {
         ArrayList<Boolean> result = new ArrayList<Boolean>();
-        result.add(getCellAt(x-1, y-1));
-        result.add(getCellAt(x,   y-1));
-        result.add(getCellAt(x+1, y-1));
-        result.add(getCellAt(x-1, y));
-        result.add(getCellAt(x+1, y));
-        result.add(getCellAt(x-1, y+1));
-        result.add(getCellAt(x,   y+1));
-        result.add(getCellAt(x+1, y+1));
+        result.add(getCellAt(x - 1, y - 1));
+        result.add(getCellAt(x, y - 1));
+        result.add(getCellAt(x + 1, y - 1));
+        result.add(getCellAt(x - 1, y));
+        result.add(getCellAt(x + 1, y));
+        result.add(getCellAt(x - 1, y + 1));
+        result.add(getCellAt(x, y + 1));
+        result.add(getCellAt(x + 1, y + 1));
         return result;
     }
 
     public void setCell(int x, int y, Boolean value) {
-        currentGeneration.set(getIndex(x, y), value);
+        currentGeneration.set(indexOf(x, y), value);
     }
 
     private Boolean getCellAt(int x, int y) {
-//        if (x < 0) {
-//            return true;
-//        }
-        return currentGeneration.get(getIndex(x, y));
+        return currentGeneration.get(indexOf(x, y));
     }
 
-    private int getIndex(int x, int y) {
+    private int indexOf(int x, int y) {
 
         if (x < 0) {
             x = width-1 + x;
@@ -91,9 +91,5 @@ public class World {
         }
 
         return y * height + x;
-    }
-
-    public BitSet getCurrentGeneration() {
-        return currentGeneration;
     }
 }

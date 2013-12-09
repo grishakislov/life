@@ -6,10 +6,10 @@ package ru.arlechin.life;
 public class Main {
     public static void main(String[] args) throws Exception {
 
-        App.screen = new Screen(App.WIDTH, App.HEIGHT);
+        App.screen = new Screen(App.WORLD_WIDTH, App.WORLD_HEIGHT);
 
         App.world = new World();
-        App.world.init(100, 100);
+        App.world.init(App.WORLD_WIDTH, App.WORLD_HEIGHT, App.screen);
 
         System.setProperty("sun.awt.noerasebackground", "true");
 
@@ -17,8 +17,7 @@ public class Main {
 
         while (true) {
             try {
-                App.world.turn();
-                App.screen.redraw(App.world.getCurrentGeneration());
+                App.world.makeTurn();
                 Thread.sleep(20);
             } catch (InterruptedException e) {
 
