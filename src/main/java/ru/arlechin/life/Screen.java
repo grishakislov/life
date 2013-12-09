@@ -16,7 +16,7 @@ public class Screen {
     private BufferedImage screen;
     private BufferedImage scaledScreen;
     private JFrame frame;
-    private JPanel panel;
+    private MainPanel panel;
 
     public Screen(int width, int height) {
 
@@ -25,11 +25,12 @@ public class Screen {
         scaledScreen = new BufferedImage(width * App.SCALE, height * App.SCALE, screen.getType());
 
         frame = new JFrame("Life");
-        frame.add("Center", new MainPanel());
-        frame.setSize(width * App.SCALE, height * App.SCALE);
+        panel = new MainPanel();
+        frame.add("Center", panel);
+        panel.setPreferredSize(new Dimension(width * App.SCALE, height * App.SCALE));
+        frame.pack();
         frame.setVisible(true);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-
     }
 
     public void redraw(BitSet world) {

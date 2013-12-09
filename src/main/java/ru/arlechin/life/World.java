@@ -23,8 +23,8 @@ public class World {
     public void turn() {
         nextGeneration.clear();
 
-        for (int y = 0; y < height; y++) {
-            for (int x = 0; x < width; x++) {
+        for (int y = 0; y <= height; y++) {
+            for (int x = 0; x <= width; x++) {
                 nextGeneration.set(getIndex(x, y), createNextGenerationCell(x, y));
             }
         }
@@ -52,7 +52,6 @@ public class World {
         return currentCellIsAlive;
     }
 
-
     private ArrayList<Boolean> getMooreNeighbourhoodFor(int x, int y) {
         ArrayList<Boolean> result = new ArrayList<Boolean>();
         result.add(getCellAt(x-1, y-1));
@@ -71,6 +70,9 @@ public class World {
     }
 
     private Boolean getCellAt(int x, int y) {
+//        if (x < 0) {
+//            return true;
+//        }
         return currentGeneration.get(getIndex(x, y));
     }
 
