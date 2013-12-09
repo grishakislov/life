@@ -16,15 +16,17 @@ public class Main {
         App.world = new World();
         App.world.init(100, 100);
 
+        System.setProperty("sun.awt.noerasebackground", "true");
+
         initGlider();
-//        App.screen.redraw(App.world.getCurrentGeneration());
+
         System.out.print("Hello, World!" + "\n");
 
         while (true) {
             try {
                 App.world.turn();
                 App.screen.redraw(App.world.getCurrentGeneration());
-                Thread.sleep(100);
+                Thread.sleep(10);
             } catch (InterruptedException e) {
 
             }

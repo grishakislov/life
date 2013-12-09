@@ -16,6 +16,7 @@ public class Screen {
     private BufferedImage screen;
     private BufferedImage scaledScreen;
     private JFrame frame;
+    private JPanel panel;
 
     public Screen(int width, int height) {
 
@@ -24,9 +25,10 @@ public class Screen {
         scaledScreen = new BufferedImage(width * App.SCALE, height * App.SCALE, screen.getType());
 
         frame = new JFrame("Life");
-        frame.add("Center", new MainCanvas());
+        frame.add("Center", new MainPanel());
         frame.setSize(width * App.SCALE, height * App.SCALE);
         frame.setVisible(true);
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
     }
 
@@ -43,18 +45,20 @@ public class Screen {
             screen.setRGB(x, y, color);
         }
 
-        Graphics2D g = scaledScreen.createGraphics();
-        g.scale(App.SCALE, App.SCALE);
-        g.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_NEAREST_NEIGHBOR);
-        g.drawImage(screen, 0, 0, null);
-        g.dispose();
     }
 
-    class MainCanvas extends Canvas {
+    class MainPanel extends JPanel {
+
         public void paint(Graphics g) {
+            Graphics2D g2d = scaledScreen.createGraphics();
+            g2d.scale(App.SCALE, App.SCALE);
+            g2d.drawImage(screen, 0, 0, null);
+            g2d.dispose();
+
             g.drawImage(scaledScreen, 0, 0, Color.white, null);
-            this.repaint();
+            repaint();
         }
+
     }
 
 }
